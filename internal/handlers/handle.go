@@ -16,6 +16,8 @@ func Handle() {
 	//rtr.HandleFunc("/jquery.min.js", api.SendJqueryJs)
 	//fs := http.FileServer(http.Dir("./templates"))
 	//http.Handle("/templates/", http.StripPrefix("/templates/", fs))
+	fs := http.FileServer(http.Dir("./templates/html"))
+	http.Handle("/templates/", http.StripPrefix("/templates/", fs))
 	http.Handle("/", rtr)
 	http.ListenAndServe(":8080", nil)
 }
