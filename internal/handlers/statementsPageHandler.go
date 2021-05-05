@@ -1,7 +1,11 @@
 package handlers
 
-import "net/http"
+import (
+	"html/template"
+	"net/http"
+)
 
-func statementPage(w http.ResponseWriter, r *http.Request) {
-
+func statementsPage(w http.ResponseWriter, r *http.Request) {
+	tmpl, _ := template.ParseFiles("internal/templates/html/statements.html", "internal/templates/html/header.html", "internal/templates/html/footer.html")
+	tmpl.ExecuteTemplate(w, "index", nil)
 }

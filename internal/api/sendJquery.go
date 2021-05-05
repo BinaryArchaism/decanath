@@ -6,7 +6,7 @@ import (
 )
 
 func SendJqueryJs(w http.ResponseWriter, r *http.Request) {
-	data, err := ioutil.ReadFile("templates/js/jquery-3.6.0.min.js")
+	data, err := ioutil.ReadFile("internal/templates/js/jquery.min.js")
 	if err != nil {
 		http.Error(w, "Couldn't read file", http.StatusInternalServerError)
 		return
