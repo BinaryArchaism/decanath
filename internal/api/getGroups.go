@@ -38,6 +38,7 @@ func GetGroups(w http.ResponseWriter, r *http.Request) {
 	sort.Slice(stds, func(i, j int) bool {
 		return stds[i].GroupId < stds[j].GroupId
 	})
+
 	jsonResponse, err := json.Marshal(stds)
 	w.Write(jsonResponse)
 }
