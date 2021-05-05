@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/BinaryArchaism/decanath/internal/config"
+	_ "github.com/lib/pq"
 )
 
 func ConnectToDB() *sql.DB {
@@ -14,6 +15,5 @@ func ConnectToDB() *sql.DB {
 	if err != nil {
 		panic(err)
 	}
-	defer db.Close()
 	return db
 }
