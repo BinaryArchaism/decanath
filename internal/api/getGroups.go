@@ -7,7 +7,6 @@ import (
 	"github.com/BinaryArchaism/decanath/internal/config"
 	"github.com/BinaryArchaism/decanath/internal/database"
 	"net/http"
-	"sort"
 )
 
 func GetGroups(w http.ResponseWriter, r *http.Request) {
@@ -35,9 +34,9 @@ func GetGroups(w http.ResponseWriter, r *http.Request) {
 		}
 		stds = append(stds, std)
 	}
-	sort.Slice(stds, func(i, j int) bool {
-		return stds[i].GroupId < stds[j].GroupId
-	})
+	//sort.Slice(stds, func(i, j int) bool {
+	//	return stds[i].GroupId < stds[j].GroupId
+	//})
 
 	jsonResponse, err := json.Marshal(stds)
 	w.Write(jsonResponse)

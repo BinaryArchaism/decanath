@@ -14,42 +14,16 @@
         </div>
     </header>
     <main class="px-3">
-        <h3>Списки групп, кафедр и преподавателей</h3>
-        <ul class="list-group">
-            <li class="list-group-item">
-                <div class="row row-cols-3">
-                    <form action="/" method="post">
-                        <button class="btn btn-light">Группы</button>
-                    </form>
-                    <form action="/list_lecturer" method="post">
-                        <button class="btn btn-dark">Преподаватели</button>
-                    </form>
-                    <form action="/list_cathedras" method="post">
-                        <button class="btn btn-dark">Кафедры</button>
-                    </form>
-                </div>
-            </li>
-        </ul>
+        <br><h3>Списки групп, кафедр и преподавателей</h3>
+
         <p class="lead">
 
-            <form action="index.html" method="post">
-                <select class="form-select"  aria-label="Default select example">
-                    <option selected>Все группы</option>
-
-                    <option value="1">Группа 1</option>
-                    <option value="2">Группа 2</option>
-                    <option value="3">Группа 3</option>
-                    <option value="4">Группа 4</option>
-
-                </select>
-            </form>
-
         <ul class="list-group">
             <li class="list-group-item">
                 <div class="row row-cols-3">
-                    <div class="col">ID</div>
-                    <div class="col">Номер группы</div>
                     <div class="col">ФИО Студента</div>
+                    <div class="col">Номер группы</div>
+                    <div class="col">ID</div>
                 </div>
             </li>
         </ul>
@@ -60,6 +34,6 @@
 
     </main>
 
-{{ template "footer" }}
+    {{ template "footer" }}
 
-{{ end }}
+    {{ end }}
