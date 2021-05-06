@@ -1,7 +1,11 @@
 package database
 
 type Lecturer struct {
-	Fio string
+	Id  uint   `json:"id"`
+	Fio string `json:"fio"`
+}
+type Lecturers struct {
+	Lecturers []Lecturer `json:"lecturers"`
 }
 
 type Student struct {
