@@ -1,4 +1,28 @@
 $(document).ready(function(){
+
+    $('#test').click(function(e) {
+        // Stop form from sending request to server
+        e.preventDefault();
+
+        var btn = $(this);
+
+        $.ajax({
+            method: "POST",
+            url: "http://localhost:8080/internal/api/testing",
+            dataType: "json",
+            data: {
+                "name": btn.val(),
+                'input': $('input').val()
+            },
+            success: function(data) {
+                console.log(data);
+            },
+            error: function(er) {
+                console.log(er);
+            }
+        });
+    })
+
     var list_group = $('#groups')
     view_list();
 
