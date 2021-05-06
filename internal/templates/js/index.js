@@ -1,4 +1,5 @@
 $(document).ready(function(){
+    console.log("hdflsjhfskjdfh")
     var list_group = $('#group')
     view_list();
     

@@ -9,12 +9,12 @@ import (
 func Handle() {
 	rtr := mux.NewRouter()
 	rtr.HandleFunc("/", indexPage)
-	rtr.HandleFunc("/schedules", schedulesPage)
 	rtr.HandleFunc("/statements", statementsPage)
+	rtr.HandleFunc("/schedules", schedulesPage)
 	rtr.HandleFunc("/internal/api/get_groups", api.GetGroups)
-	http.HandleFunc("/internal/jquery.min.js", api.SendJqueryJs)
+	http.HandleFunc("/jquery.min.js", api.SendJqueryJs)
 	fs := http.FileServer(http.Dir("./internal/templates"))
-	http.Handle("internal/templates/", http.StripPrefix("internal/templates/", fs))
+	http.Handle("/internal/templates/", http.StripPrefix("/internal/templates/", fs))
 	http.Handle("/", rtr)
 	http.ListenAndServe(":8080", nil)
 }
