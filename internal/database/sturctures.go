@@ -12,3 +12,12 @@ type Student struct {
 type Students struct {
 	Students []Student `json:"students"`
 }
+
+type Group struct {
+	Id     uint `json:"id"`
+	Number uint `json:"number"`
+	CathId uint `json:"cath_id"`
+}
+type Groups struct {
+	Groups []Group `json:"groups"`
+}

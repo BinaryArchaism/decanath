@@ -3,7 +3,7 @@ $(document).ready(function(){
     view_list();
 
     function view_list(){
-        $.getJSON("http://localhost:8080/internal/api/get_groups", function(data) {
+        $.getJSON("http://localhost:8080/internal/api/get_students", function(data) {
         var students = data
         students.forEach(student => {
             append_to_list(student)
