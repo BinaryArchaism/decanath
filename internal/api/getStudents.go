@@ -21,7 +21,7 @@ func GetStudents(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 
 	var stds = []database.Student{}
-	result, err := db.Query("select * from students")
+	result, err := db.Query("select students.id, students.title, groups.number from students, groups where students.group_id = groups.id")
 	if err != nil {
 		panic(err)
 	}

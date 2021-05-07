@@ -20,7 +20,7 @@ func GetGroups(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 
 	var stds = []database.Group{}
-	result, err := db.Query("select * from groups")
+	result, err := db.Query("select groups.id, groups.number, cathedras.number from groups, cathedras where groups.cath_id = cathedras.id")
 	if err != nil {
 		panic(err)
 	}

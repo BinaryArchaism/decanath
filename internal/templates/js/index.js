@@ -2,6 +2,11 @@
 $(document).ready(function(){
     showStudents()
 
+    $('#students').click(function(e) {
+        e.preventDefault();
+        showStudents()
+    })
+
     $('#groups').click(function(e) {
         // Stop form from sending request to server
          e.preventDefault();
@@ -23,11 +28,9 @@ $(document).ready(function(){
         showCathedras()
     })
 
-
-
     function showStudents() {
         var hdr = $('#hdr')
-        hdr.append('<li class="list-group-item">\n' +
+        hdr.html('<li class="list-group-item">\n' +
             '                <div class="row row-cols-3">\n' +
             '                    <div class="col">ФИО Студента</div>\n' +
             '                    <div class="col">Номер группы</div>\n' +
@@ -59,7 +62,7 @@ $(document).ready(function(){
             '                <div class="row row-cols-3">\n' +
             '                    <div class="col">ID</div>\n' +
             '                    <div class="col">Номер группы</div>\n' +
-            '                    <div class="col">ID Кафедры</div>\n' +
+            '                    <div class="col">Номер кафедры</div>\n' +
             '                </div>\n' +
             '            </li>')
         var list_groups = $('#info')
