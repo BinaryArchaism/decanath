@@ -27,6 +27,14 @@ $(document).ready(function(){
 
 
     function showStudents() {
+        var hdr = $('#hdr')
+        hdr.append('<li class="list-group-item">\n' +
+            '                <div class="row row-cols-3">\n' +
+            '                    <div class="col">ФИО Студента</div>\n' +
+            '                    <div class="col">Номер группы</div>\n' +
+            '                    <div class="col">ID</div>\n' +
+            '                </div>\n' +
+            '            </li>')
         var list_students = $('#info')
         list_students.html("")
         $.getJSON("http://localhost:8080/internal/api/get_students", function(data) {
@@ -47,6 +55,14 @@ $(document).ready(function(){
     }
 
     function showGroups() {
+        var hdr = $('#hdr')
+        hdr.html('<li class="list-group-item">\n' +
+            '                <div class="row row-cols-3">\n' +
+            '                    <div class="col">ID</div>\n' +
+            '                    <div class="col">Номер группы</div>\n' +
+            '                    <div class="col">ID Кафедры</div>\n' +
+            '                </div>\n' +
+            '            </li>')
         var list_groups = $('#info')
         list_groups.html("")
         $.getJSON("http://localhost:8080/internal/api/get_groups", function(data) {
@@ -67,16 +83,22 @@ $(document).ready(function(){
     }
 
     function showLecturers() {
+        var hdr = $('#hdr')
+        hdr.html('<li class="list-group-item">\n' +
+            '                <div class="row row-cols-2">\n' +
+            '                    <div class="col">ФИО Преподавателя</div>\n' +
+            '                    <div class="col">ID</div>\n' +
+            '                </div>\n' +
+            '            </li>')
         var list_lecturers = $('#info')
         list_lecturers.html("")
         $.getJSON("http://localhost:8080/internal/api/get_lecturers", function(data) {
             var students = data
             students.forEach(student => {
                 list_lecturers.append(`<li class="list-group-item">
-                                <div class="row row-cols-3">
+                                <div class="row row-cols-2">
                                     <div class="col">${student['fio']}</div>
-                                    <div class="col">fdgdfg</div>
-                                    <div class="col">popa</div>
+                                    <div class="col">${student['id']}</div>
                                 </div>
                             </li>`)
             });
