@@ -25,3 +25,12 @@ type Group struct {
 type Groups struct {
 	Groups []Group `json:"groups"`
 }
+
+type Cathedra struct {
+	Id     uint   `json:"id"`
+	Title  string `json:"title"`
+	Number uint   `json:"number"`
+}
+type Cathedras struct {
+	Cathedras []Cathedra `json:"cathedras"`
+}

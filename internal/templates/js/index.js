@@ -14,14 +14,13 @@ $(document).ready(function(){
     })
 
     $('#lecturers').click(function(e) {
-        // Stop form from sending request to server
          e.preventDefault();
-        // $.ajax({
-        //     method: "POST",
-        //     url: "http://localhost:8080/internal/api/get_lecturers",
-        //     dataType: "json",
-        // });
         showLecturers()
+    })
+
+    $('#cathedras').click(function (e) {
+        e.preventDefault();
+        showCathedras()
     })
 
 
@@ -109,6 +108,30 @@ $(document).ready(function(){
     }
 
     function showCathedras() {
-
+        var hdr = $('#hdr')
+        hdr.html('<li class="list-group-item">\n' +
+            '                <div class="row row-cols-3">\n' +
+            '                    <div class="col">Название кафедры</div>\n' +
+            '                    <div class="col">Номер кафедры</div>\n' +
+            '                    <div class="col">ID Кафедры</div>\n' +
+            '                </div>\n' +
+            '            </li>')
+        var list_groups = $('#info')
+        list_groups.html("")
+        $.getJSON("http://localhost:8080/internal/api/get_cathedras", function(data) {
+            var students = data
+            students.forEach(student => {
+                list_groups.append(`<li class="list-group-item">
+                                <div class="row row-cols-3">
+                                    <div class="col">${student['title']}</div>
+                                    <div class="col">${student['number']}</div>
+                                    <div class="col">${student['id']}</div>
+                                </div>
+                            </li>`)
+            });
+        })
+            .fail(function() {
+                alert( "error" );
+            })
     }
 });
