@@ -7,6 +7,7 @@ import (
 	"github.com/BinaryArchaism/decanath/internal/config"
 	"github.com/BinaryArchaism/decanath/internal/database"
 	"net/http"
+	"sort"
 )
 
 func GetLecturers(w http.ResponseWriter, r *http.Request) {
@@ -34,6 +35,9 @@ func GetLecturers(w http.ResponseWriter, r *http.Request) {
 		}
 		stds = append(stds, std)
 	}
+	sort.Slice(stds, func(i, j int) bool {
+		return stds[i].Fio < stds[j].Fio
+	})
 	fmt.Println("getLecturers")
 	jsonResponse, err := json.Marshal(stds)
 	w.Write(jsonResponse)

@@ -1,5 +1,6 @@
 //функция показа всех студентов, групп, преподов, кафедр
 $(document).ready(function(){
+    var currentGroup = 0
     showStudents()
 
     $('#students').click(function(e) {
@@ -30,16 +31,19 @@ $(document).ready(function(){
 
     function showStudents() {
         var hdr = $('#hdr')
-        hdr.html('<li class="list-group-item">\n' +
+        hdr.html('<button type="button" class="btn btn-light">Все группы</button>')
+        hdr.append('<li class="list-group-item">\n' +
             '                <div class="row row-cols-3">\n' +
             '                    <div class="col">ФИО Студента</div>\n' +
             '                    <div class="col">Номер группы</div>\n' +
             '                    <div class="col">ID</div>\n' +
             '                </div>\n' +
             '            </li>')
+
         var list_students = $('#info')
         list_students.html("")
-        $.getJSON("http://localhost:8080/internal/api/get_students", function(data) {
+        $.getJSON("http://localhost:8080/internal/api/get_students", function(data) {show(data)})
+        function show(data) {
             var students = data
             students.forEach(student => {
                 list_students.append(`<li class="list-group-item">
@@ -50,10 +54,7 @@ $(document).ready(function(){
                                 </div>
                             </li>`)
             });
-        })
-            .fail(function() {
-                alert( "error" );
-            })
+        }
     }
 
     function showGroups() {

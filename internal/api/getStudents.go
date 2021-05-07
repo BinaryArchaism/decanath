@@ -36,7 +36,7 @@ func GetStudents(w http.ResponseWriter, r *http.Request) {
 		stds = append(stds, std)
 	}
 	sort.Slice(stds, func(i, j int) bool {
-		return stds[i].GroupId < stds[j].GroupId
+		return stds[i].FullName < stds[j].FullName
 	})
 	fmt.Println("getStudents")
 	jsonResponse, err := json.Marshal(stds)

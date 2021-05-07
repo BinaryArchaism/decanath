@@ -7,6 +7,7 @@ import (
 	"github.com/BinaryArchaism/decanath/internal/config"
 	"github.com/BinaryArchaism/decanath/internal/database"
 	"net/http"
+	"sort"
 )
 
 func GetCathedras(w http.ResponseWriter, r *http.Request) {
@@ -34,6 +35,9 @@ func GetCathedras(w http.ResponseWriter, r *http.Request) {
 		}
 		stds = append(stds, std)
 	}
+	sort.Slice(stds, func(i, j int) bool {
+		return stds[i].Number < stds[j].Number
+	})
 	fmt.Println("getCathedras")
 	jsonResponse, err := json.Marshal(stds)
 	w.Write(jsonResponse)
