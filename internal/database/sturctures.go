@@ -34,3 +34,16 @@ type Cathedra struct {
 type Cathedras struct {
 	Cathedras []Cathedra `json:"cathedras"`
 }
+
+type Schedule struct {
+	Id         uint   `json:"id"`
+	Cabinet    uint   `json:"cabinet"`
+	LecturerId uint   `json:"lecturer_id"`
+	SubjectId  uint   `json:"subject_id"`
+	GroupId    uint   `json:"group_id"`
+	Date       string `json:"date"`
+	CathId     uint   `json:"cath_id"`
+}
+type Schedules struct {
+	Schedules []Schedule `json:"schedules"`
+}

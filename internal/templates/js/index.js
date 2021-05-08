@@ -8,7 +8,6 @@ $(document).ready(function(){
     })
 
     $('#groups').click(function(e) {
-        // Stop form from sending request to server
          e.preventDefault();
         // $.ajax({
         //     method: "POST",
