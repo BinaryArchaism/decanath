@@ -1,6 +1,5 @@
 //функция показа всех студентов, групп, преподов, кафедр
 $(document).ready(function(){
-    var currentGroup = 0
     showStudents()
 
     $('#students').click(function(e) {
@@ -29,9 +28,25 @@ $(document).ready(function(){
         showCathedras()
     })
 
+    $('#swch').on('change', function() {
+        alert( this.value );
+    });
+
     function showStudents() {
+        var switcher = $('#switcher')
+        switcher.html('')
+        switcher.append('<select id="swch" class="form-select" aria-label="Default select example"></select>')
+        var swch = $('#swch')
+        swch.append(`<option selected value="0">Все группы</option>`)
+        $.getJSON("http://localhost:8080/internal/api/get_groups", function(data){addGroupsToSwitcher(data)})
+        function addGroupsToSwitcher(data) {
+            var students = data
+            students.forEach(student => {
+                swch.append(`<option value=${student['id']}>${student['number']}</option>`)
+            })
+        }
         var hdr = $('#hdr')
-        hdr.html('<button type="button" class="btn btn-light">Все группы</button>')
+        hdr.html('')
         hdr.append('<li class="list-group-item">\n' +
             '                <div class="row row-cols-3">\n' +
             '                    <div class="col">ФИО Студента</div>\n' +
@@ -46,6 +61,7 @@ $(document).ready(function(){
         function show(data) {
             var students = data
             students.forEach(student => {
+
                 list_students.append(`<li class="list-group-item">
                                 <div class="row row-cols-3">
                                     <div class="col">${student['FIO']}</div>
@@ -58,6 +74,8 @@ $(document).ready(function(){
     }
 
     function showGroups() {
+        var switcher = $('#switcher')
+        switcher.html('')
         var hdr = $('#hdr')
         hdr.html('<li class="list-group-item">\n' +
             '                <div class="row row-cols-3">\n' +
@@ -86,6 +104,8 @@ $(document).ready(function(){
     }
 
     function showLecturers() {
+        var switcher = $('#switcher')
+        switcher.html('')
         var hdr = $('#hdr')
         hdr.html('<li class="list-group-item">\n' +
             '                <div class="row row-cols-2">\n' +
@@ -112,6 +132,8 @@ $(document).ready(function(){
     }
 
     function showCathedras() {
+        var switcher = $('#switcher')
+        switcher.html('')
         var hdr = $('#hdr')
         hdr.html('<li class="list-group-item">\n' +
             '                <div class="row row-cols-3">\n' +
