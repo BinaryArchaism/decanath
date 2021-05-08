@@ -28,15 +28,14 @@ $(document).ready(function(){
         showCathedras()
     })
 
-    $('#swch').on('change', function() {
-        alert( this.value );
-    });
-
-    function showStudents() {
+    function  prepareGroupSelect() {
         var switcher = $('#switcher')
         switcher.html('')
         switcher.append('<select id="swch" class="form-select" aria-label="Default select example"></select>')
         var swch = $('#swch')
+        swch.on('change', function() {
+            alert( this.value );
+        });
         swch.append(`<option selected value="0">Все группы</option>`)
         $.getJSON("http://localhost:8080/internal/api/get_groups", function(data){addGroupsToSwitcher(data)})
         function addGroupsToSwitcher(data) {
@@ -45,6 +44,10 @@ $(document).ready(function(){
                 swch.append(`<option value=${student['id']}>${student['number']}</option>`)
             })
         }
+    }
+
+    function showStudents() {
+        prepareGroupSelect();
         var hdr = $('#hdr')
         hdr.html('')
         hdr.append('<li class="list-group-item">\n' +
