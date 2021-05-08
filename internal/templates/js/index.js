@@ -34,20 +34,19 @@ $(document).ready(function(){
         switcher.append('<select id="swch" class="form-select" aria-label="Default select example"></select>')
         var swch = $('#swch')
         swch.on('change', function() {
-            alert( this.value );
+            showStudentsList(this.value)
         });
         swch.append(`<option selected value="0">Все группы</option>`)
         $.getJSON("http://localhost:8080/internal/api/get_groups", function(data){addGroupsToSwitcher(data)})
         function addGroupsToSwitcher(data) {
             var students = data
             students.forEach(student => {
-                swch.append(`<option value=${student['id']}>${student['number']}</option>`)
+                swch.append(`<option value=${student['number']}>${student['number']}</option>`)
             })
         }
     }
 
-    function showStudents() {
-        prepareGroupSelect();
+    function  showStudentsList(groupID) {
         var hdr = $('#hdr')
         hdr.html('')
         hdr.append('<li class="list-group-item">\n' +
@@ -64,16 +63,22 @@ $(document).ready(function(){
         function show(data) {
             var students = data
             students.forEach(student => {
-
-                list_students.append(`<li class="list-group-item">
+                if (groupID == 0 || groupID == student['groupid']){
+                    list_students.append(`<li class="list-group-item">
                                 <div class="row row-cols-3">
                                     <div class="col">${student['FIO']}</div>
                                     <div class="col">${student['groupid']}</div>
                                     <div class="col">${student['id']}</div>
                                 </div>
                             </li>`)
+                }
             });
         }
+    }
+
+    function showStudents(groupID) {
+        prepareGroupSelect();
+        showStudentsList(0)
     }
 
     function showGroups() {
