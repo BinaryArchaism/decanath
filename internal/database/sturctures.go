@@ -56,3 +56,21 @@ type Subject struct {
 type Subjects struct {
 	Subjects []Subject `json:"subjects"`
 }
+
+type Mark struct {
+	Value     uint `json:"value"`
+	StudentId uint `json:"student_id"`
+	SubjectId uint `json:"subject_id"`
+}
+type Marks struct {
+	Marks []Mark `json:"marks"`
+}
+
+type Statement struct {
+	Cath         uint     `json:"cath"`
+	Fio          string   `json:"fio"`
+	SubjectName  string   `json:"subject_name"`
+	Date         string   `json:"date"`
+	StudentsList []string `json:"students_list"`
+	MarksList    []uint   `json:"marks_list"`
+}
