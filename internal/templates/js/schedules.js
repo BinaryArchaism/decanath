@@ -85,7 +85,7 @@ $(document).ready(function(){
         let sch = getSchedules();
         sch.then(()=>{
             resp = sch.responseJSON;
-            showByGroups(resp, 2);
+            showByGroups(resp);
         });
    }
 
