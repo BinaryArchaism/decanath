@@ -71,8 +71,9 @@ $(document).ready(function(){
         var list_schls = $('#info')
         list_schls.html("")
         schGroups.forEach(schGroup=>{
+            console.log(schGroup.date)
             let schDate = new Date(schGroup.date)
-            dateStr = schDate.getDay() + ' ' + schDate.getMonthName() + ' ' + schDate.getFullYear()
+            dateStr = schDate.getDate() + ' ' + schDate.getMonthName() + ' ' + schDate.getFullYear()
             list_schls.append(`<li class="list-group-item">
                                 <div class="row row-cols-5">
                                     <div class="col d-flex align-items-center justify-content-center"><p class="m-0">${subjectIDToNumber(schGroup.subject_id)}</p></div>
@@ -107,7 +108,7 @@ $(document).ready(function(){
         list_schls.html("")
         schGroups.forEach(schGroup=>{
             let schDate = new Date(schGroup.date)
-            dateStr = schDate.getDay() + ' ' + schDate.getMonthName() + ' ' + schDate.getFullYear()
+            dateStr = schDate.getDate() + ' ' + schDate.getMonthName() + ' ' + schDate.getFullYear()
             list_schls.append(`<li class="list-group-item">
                                 <div class="row row-cols-5">
                                     <div class="col d-flex align-items-center justify-content-center"><p class="m-0">${subjectIDToNumber(schGroup.subject_id)}</p></div>
