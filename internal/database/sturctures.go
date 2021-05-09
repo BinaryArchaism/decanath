@@ -67,10 +67,10 @@ type Marks struct {
 }
 
 type Statement struct {
-	Cath         uint            `json:"cath"`
-	Fio          string          `json:"fio"`
-	SubjectName  string          `json:"subject_name"`
-	Date         string          `json:"date"`
-	StudentsList []string        `json:"students_list"`
-	MarksList    []uint `json:"marks_list"`
+	Cath         uint   `json:"cath"`
+	Fio          string `json:"fio"`
+	SubjectName  string `json:"subject_name"`
+	Date         string `json:"date"`
+	StudentsList string `json:"students_list"`
+	MarksList    uint   `json:"marks_list"`
 }

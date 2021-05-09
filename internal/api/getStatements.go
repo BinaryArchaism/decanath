@@ -26,7 +26,7 @@ func GetStatements(w http.ResponseWriter, r *http.Request) {
 	}
 	defer db.Close()
 
-	var stds = database.Statement{}
+	var stds = []database.Statement{}
 	var query = fmt.Sprintf("select c.number, l.fio, subjects.title, s.date, s2.title\nFROM subjects\nJOIN schedules s on subjects.id = s.subject_id\nJOIN lecturer l on s.lecturer_id = l.id\nJOIN groups g on s.group_id = g.id\nJOIN students s2 on g.id = s2.group_id\nJOIN cathedras c on g.cath_id = c.id\nWHERE subject_id = %d and s.group_id = %d", subjectId, groupId)
 	fmt.Println(query)
 	students, err := db.Query(query)
@@ -42,20 +42,18 @@ func GetStatements(w http.ResponseWriter, r *http.Request) {
 	}
 	defer students.Close()
 
-	students.Scan(&stds.Cath, &stds.Fio, &stds.SubjectName, &stds.Date)
-
 	for students.Next() {
-		var mark uint
-		err := marks.Scan(&mark)
-		if err == nil {
-			stds.MarksList = append(stds.MarksList, mark)
+		var std database.Statement
+		students.Scan(&std.Cath, &std.Fio, &std.SubjectName, &std.Date)
+		err = students.Scan(&std.StudentsList)
+		if err != nil {
+			continue
 		}
-
-		var std string
-		err = students.Scan(&std)
-		if err == nil {
-			stds.StudentsList = append(stds.StudentsList, std)
+		err := marks.Scan(&std.MarksList)
+		if err != nil {
+			continue
 		}
+		stds = append(stds, std)
 	}
 
 	fmt.Println("getStatements")
