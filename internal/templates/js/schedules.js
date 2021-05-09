@@ -71,7 +71,6 @@ $(document).ready(function(){
         var list_schls = $('#info')
         list_schls.html("")
         schGroups.forEach(schGroup=>{
-            console.log(schGroup.date)
             let schDate = new Date(schGroup.date)
             dateStr = schDate.getDate() + ' ' + schDate.getMonthName() + ' ' + schDate.getFullYear()
             list_schls.append(`<li class="list-group-item">
