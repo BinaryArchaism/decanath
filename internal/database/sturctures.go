@@ -1,7 +1,5 @@
 package database
 
-import "database/sql"
-
 type Lecturer struct {
 	Id  uint   `json:"id"`
 	Fio string `json:"fio"`
@@ -74,5 +72,5 @@ type Statement struct {
 	SubjectName  string          `json:"subject_name"`
 	Date         string          `json:"date"`
 	StudentsList []string        `json:"students_list"`
-	MarksList    []sql.NullInt32 `json:"marks_list"`
+	MarksList    []uint `json:"marks_list"`
 }
