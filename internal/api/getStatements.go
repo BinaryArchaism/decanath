@@ -41,7 +41,9 @@ func GetStatements(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 	defer students.Close()
-	
+
+	students.Scan(&stds.Cath, &stds.Fio, &stds.SubjectName, &stds.Date)
+
 	for students.Next() {
 		var mark uint
 		err := marks.Scan(&mark)
