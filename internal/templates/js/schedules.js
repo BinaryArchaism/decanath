@@ -23,8 +23,12 @@ $(document).ready(function(){
 
     json_subjects = getSubjects()
     json_subjects.then(()=> {
-        prepareGroupsSelect();
-        showDefaultSchedules();
+        json_lecturers = getLecturers()
+        json_lecturers.then(()=>{
+            json_lecturers = json_lecturers.responseJSON
+            prepareGroupsSelect();
+            showDefaultSchedules();
+        })
     })
 
     $('#by_groups').click(function(e) {
@@ -56,9 +60,10 @@ $(document).ready(function(){
         }
         var schdls = $('#schdls')
         schdls.html('<li class="list-group-item">\n' +
-            '                <div class="row row-cols-4">\n' +
+            '                <div class="row row-cols-5">\n' +
             '                    <div class="col d-flex align-items-center justify-content-center"><p class="m-0">Название предмета</p></div>\n' +
             '                    <div class="col d-flex align-items-center justify-content-center"><p class="m-0">Номер группы</p></div>\n' +
+            '                    <div class="col d-flex align-items-center justify-content-center"><p class="m-0">ФИО Преподавателя</p></div>\n' +
             '                    <div class="col d-flex align-items-center justify-content-center"><p class="m-0">Кабинет</p></div>\n' +
             '                    <div class="col d-flex align-items-center justify-content-center"><p class="m-0">Дата</p></div>\n' +
             '                </div>\n' +
@@ -69,9 +74,10 @@ $(document).ready(function(){
             let schDate = new Date(schGroup.date)
             dateStr = schDate.getDay() + ' ' + schDate.getMonthName() + ' ' + schDate.getFullYear()
             list_schls.append(`<li class="list-group-item">
-                                <div class="row row-cols-4">
+                                <div class="row row-cols-5">
                                     <div class="col d-flex align-items-center justify-content-center"><p class="m-0">${subjectIDToNumber(schGroup.subject_id)}</p></div>
                                     <div class="col d-flex align-items-center justify-content-center"><p class="m-0">${groupIDToNumber(schGroup.group_id)}</p></div>
+                                    <div class="col d-flex align-items-center justify-content-center"><p class="m-0">${lecturerIDToFIO(schGroup.lecturer_id)}</p></div>
                                     <div class="col d-flex align-items-center justify-content-center"><p class="m-0">${schGroup.cabinet}</p></div>
                                     <div class="col d-flex align-items-center justify-content-center"><p class="m-0">${dateStr}</p></div>
                                 </div>
@@ -89,8 +95,9 @@ $(document).ready(function(){
         }
         var schdls = $('#schdls')
         schdls.html('<li class="list-group-item">\n' +
-            '                <div class="row row-cols-4">\n' +
+            '                <div class="row row-cols-5">\n' +
             '                    <div class="col d-flex align-items-center justify-content-center"><p class="m-0">Название предмета</p></div>\n' +
+            '                    <div class="col d-flex align-items-center justify-content-center"><p class="m-0">Номер группы</p></div>\n' +
             '                    <div class="col d-flex align-items-center justify-content-center"><p class="m-0">ФИО Преподавателя</p></div>\n' +
             '                    <div class="col d-flex align-items-center justify-content-center"><p class="m-0">Кабинет</p></div>\n' +
             '                    <div class="col d-flex align-items-center justify-content-center"><p class="m-0">Дата</p></div>\n' +
@@ -102,8 +109,9 @@ $(document).ready(function(){
             let schDate = new Date(schGroup.date)
             dateStr = schDate.getDay() + ' ' + schDate.getMonthName() + ' ' + schDate.getFullYear()
             list_schls.append(`<li class="list-group-item">
-                                <div class="row row-cols-4">
+                                <div class="row row-cols-5">
                                     <div class="col d-flex align-items-center justify-content-center"><p class="m-0">${subjectIDToNumber(schGroup.subject_id)}</p></div>
+                                    <div class="col d-flex align-items-center justify-content-center"><p class="m-0">${groupIDToNumber(schGroup.group_id)}</p></div>
                                     <div class="col d-flex align-items-center justify-content-center"><p class="m-0">${lecturerIDToFIO(schGroup.lecturer_id)}</p></div>
                                     <div class="col d-flex align-items-center justify-content-center"><p class="m-0">${schGroup.cabinet}</p></div>
                                     <div class="col d-flex align-items-center justify-content-center"><p class="m-0">${dateStr}</p></div>
