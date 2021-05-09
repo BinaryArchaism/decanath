@@ -47,3 +47,12 @@ type Schedule struct {
 type Schedules struct {
 	Schedules []Schedule `json:"schedules"`
 }
+
+type Subject struct {
+	Id         uint   `json:"id"`
+	Title      string `json:"title"`
+	TimeAmount uint   `json:"time_amount"`
+}
+type Subjects struct {
+	Subjects []Subject `json:"subjects"`
+}
