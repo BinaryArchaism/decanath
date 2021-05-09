@@ -46,11 +46,6 @@ $(document).ready(function(){
         })
     })
 
-    // $('#by_cathedras').click(function (e) {
-    //     e.preventDefault();
-    //     showCathedras()
-    // })
-
     function showByGroups(schedules, groupID) {
         let schGroups = schedules
         if (arguments.length == 2 && groupID != ""){
