@@ -20,7 +20,7 @@ func GetSchedules(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 
 	var stds = []database.Schedule{}
-	result, err := db.Query("select shedules.id, shedules.cabinet, shedules.lecturer_id, shedules.subject_id, shedules.group_id, shedules.date, groups.cath_id from shedules, groups where shedules.group_id = groups.id")
+	result, err := db.Query("select sсhedules.id, sсhedules.cabinet, sсhedules.lecturer_id, sсhedules.subject_id, sсhedules.group_id, sсhedules.date, groups.cath_id from sсhedules, groups where sсhedules.group_id = groups.id")
 	if err != nil {
 		panic(err)
 	}
