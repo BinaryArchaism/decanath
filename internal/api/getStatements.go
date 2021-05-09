@@ -37,7 +37,7 @@ func GetStatements(w http.ResponseWriter, r *http.Request) {
 	defer students.Close()
 
 	for students.Next() {
-		var mark uint
+		var mark sql.NullInt32
 		err := marks.Scan(&mark)
 		if err == nil {
 			stds.MarksList = append(stds.MarksList, mark)
