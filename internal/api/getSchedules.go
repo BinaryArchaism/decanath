@@ -20,12 +20,7 @@ func GetSchedules(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 
 	var stds = []database.Schedule{}
-
-	result, err := db.Query("select schedules.id, schedules.cabinet, lecturer.fio, subjects.title, " +
-		"groups.number, schedules.date, cathedras.number from schedules, lecturer, subjects, groups, cathedras " +
-		"where (schedules.lecturer_id = lecturer.id) and schedules.subject_id = subjects.id" +
-		" and schedules.group_id = groups.id and (schedules.group_id = groups.id and groups.cath_id = cathedras.id)")
-
+	result, err := db.Query("select shedules.id, shedules.cabinet, shedules.lecturer_id, shedules.subject_id, shedules.group_id, shedules.date, groups.cath_id from shedules, groups where shedules.group_id = groups.id")
 	if err != nil {
 		panic(err)
 	}
