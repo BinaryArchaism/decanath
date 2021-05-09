@@ -18,31 +18,33 @@ Date.locale = {
 
 $(document).ready(function(){
     var json_groups
-    prepareGroupsSelect();
-    showDefaultSchedules();
+    var json_subjects
+    json_subjects = getSubjects()
+    json_subjects.then(()=> {
+        prepareGroupsSelect();
+        showDefaultSchedules();
+    })
 
-    $('#students').click(function(e) {
+    $('#by_groups').click(function(e) {
         e.preventDefault();
-        showStudents()
+        json_subjects = getSubjects()
+        json_subjects.then(()=>{
+            prepareGroupsSelect();
+            showDefaultSchedules();
+        });
     })
 
-    $('#groups').click(function(e) {
-         e.preventDefault();
-        showGroups()
-    })
-
-    $('#lecturers').click(function(e) {
+    $('#by_lecturers').click(function(e) {
          e.preventDefault();
         showLecturers()
     })
 
-    $('#cathedras').click(function (e) {
+    $('#by_cathedras').click(function (e) {
         e.preventDefault();
         showCathedras()
     })
 
     function showByGroups(schedules, groupID) {
-        console.log(groupID)
         let schGroups = schedules
         if (arguments.length == 2 && groupID != ""){
             schGroups = schedules.filter(function (schedule) {
@@ -50,7 +52,6 @@ $(document).ready(function(){
                 }
             );
         }
-        console.log(schGroups)
         var schdls = $('#schdls')
         schdls.html('<li class="list-group-item">\n' +
             '                <div class="row row-cols-4">\n' +
@@ -67,9 +68,9 @@ $(document).ready(function(){
             dateStr = schDate.getDay() + ' ' + schDate.getMonthName() + ' ' + schDate.getFullYear()
             list_schls.append(`<li class="list-group-item">
                                 <div class="row row-cols-4">
-                                    <div class="col d-flex align-items-center justify-content-center"><p class="m-0">${schGroup['subject_id']}</p></div>
+                                    <div class="col d-flex align-items-center justify-content-center"><p class="m-0">${subjectIDToNumber(schGroup.subject_id)}</p></div>
                                     <div class="col d-flex align-items-center justify-content-center"><p class="m-0">${groupIDToNumber(schGroup.group_id)}</p></div>
-                                    <div class="col d-flex align-items-center justify-content-center"><p class="m-0">${schGroup['cabinet']}</p></div>
+                                    <div class="col d-flex align-items-center justify-content-center"><p class="m-0">${schGroup.cabinet}</p></div>
                                     <div class="col d-flex align-items-center justify-content-center"><p class="m-0">${dateStr}</p></div>
                                 </div>
                             </li>`)
@@ -80,8 +81,15 @@ $(document).ready(function(){
         group_by_id = json_groups.find(function (group) {
             return group.id == ID;
         });
-        console.log(group_by_id)
         return group_by_id.number
+    }
+
+    function subjectIDToNumber(ID) {
+        subjects = json_subjects.responseJSON
+        subject_by_id = subjects.find(function (subject) {
+            return subject.id == ID
+        });
+        return subject_by_id.title
     }
 
     function prepareGroupsSelect() {
@@ -117,6 +125,14 @@ $(document).ready(function(){
             console.log(error);
             return null;
         });
+    }
+
+    function getSubjects() {
+        return $.getJSON("/internal/api/get_subjects", function (data) {
+            return data;
+        }).fail(function (error) {
+            console.log(error)
+        })
     }
 
    function showDefaultSchedules() {
