@@ -51,14 +51,8 @@ func GetStatements(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var stdsWithMarks = []database.Statement{}
-	query = fmt.Sprintf("select c.number, l.fio, subjects.title, s.date, s2.title, m.value\n"+
-		"FROM subjects\nJOIN schedules s on subjects.id = s.subject_id\n"+
-		"JOIN lecturer l on s.lecturer_id = l.id\n"+
-		"JOIN groups g on s.group_id = g.id\n"+
-		"JOIN students s2 on g.id = s2.group_id\n"+
-		"JOIN cathedras c on g.cath_id = c.id\n"+
-		"JOIN marks m on s2.id = m.student_id\n"+
-		"where s.subject_id = %d and s.group_id = %d", subjectId, groupId)
+	query = fmt.Sprintf("select 0, 0, 0, 0, students.title, marks.value "+
+		"from marks, students where (students.group_id = %d and student_id = students.id) and subject_id = %d", groupId, subjectId)
 
 	studentsWithMarks, err := db.Query(query)
 	if err != nil {
