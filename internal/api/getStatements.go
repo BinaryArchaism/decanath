@@ -26,49 +26,64 @@ func GetStatements(w http.ResponseWriter, r *http.Request) {
 	}
 	defer db.Close()
 
-	var stds = []database.Statement{}
-	var query = fmt.Sprintf("select c.number, l.fio, subjects.title, s.date, s2.title\nFROM subjects\nJOIN schedules s on subjects.id = s.subject_id\nJOIN lecturer l on s.lecturer_id = l.id\nJOIN groups g on s.group_id = g.id\nJOIN students s2 on g.id = s2.group_id\nJOIN cathedras c on g.cath_id = c.id\nWHERE subject_id = %d and s.group_id = %d", subjectId, groupId)
-	fmt.Println(query)
-	students, err := db.Query(query)
-	//students, err := db.Query("select c.number, l.fio, subjects.title, s.date, s2.title, m.value\nFROM subjects\nJOIN schedules s on subjects.id = s.subject_id\nJOIN lecturer l on s.lecturer_id = l.id\nJOIN groups g on s.group_id = g.id\nJOIN students s2 on g.id = s2.group_id\nJOIN cathedras c on g.cath_id = c.id\nJOIN marks m on s2.id = m.student_id and subjects.id = m.subject_id")
-	if err != nil {
-		panic(err)
-	}
-	query = fmt.Sprintf("select marks.value, students.title from marks, students where (students.group_id = %d and student_id = students.id) and subject_id = %d", groupId, subjectId)
-	fmt.Println(query)
-	marks, err := db.Query(query)
-	if err != nil {
-		panic(err)
-	}
-	defer students.Close()
+	var stdsWithoutMarks = []database.Statement{}
+	var query = fmt.Sprintf("select c.number, l.fio, subjects.title, s.date, s2.title, 0\n"+
+		"FROM subjects\nJOIN schedules s on subjects.id = s.subject_id\n"+
+		"JOIN lecturer l on s.lecturer_id = l.id\n"+
+		"JOIN groups g on s.group_id = g.id\n"+
+		"JOIN students s2 on g.id = s2.group_id\n"+
+		"JOIN cathedras c on g.cath_id = c.id\n"+
+		"WHERE subject_id = %d and s.group_id = %d", subjectId, groupId)
 
-	for students.Next() {
+	studentsWithoutMarks, err := db.Query(query)
+	if err != nil {
+		panic(err)
+	}
+	defer studentsWithoutMarks.Close()
+
+	for studentsWithoutMarks.Next() {
 		var std database.Statement
-		err := students.Scan(&std.Cath, &std.Fio, &std.SubjectName, &std.Date, &std.StudentsList)
+		err := studentsWithoutMarks.Scan(&std.Cath, &std.Fio, &std.SubjectName, &std.Date, &std.StudentsList, &std.MarksList)
 		if err != nil {
 			continue
 		}
-		stds = append(stds, std)
+		stdsWithoutMarks = append(stdsWithoutMarks, std)
 	}
 
-	for marks.Next() {
-		var mark database.Mark
-		err := marks.Scan(&mark.Value, &mark.FIO)
+	var stdsWithMarks = []database.Statement{}
+	query = fmt.Sprintf("select c.number, l.fio, subjects.title, s.date, s2.title, m.value\n"+
+		"FROM subjects\nJOIN schedules s on subjects.id = s.subject_id\n"+
+		"JOIN lecturer l on s.lecturer_id = l.id\n"+
+		"JOIN groups g on s.group_id = g.id\n"+
+		"JOIN students s2 on g.id = s2.group_id\n"+
+		"JOIN cathedras c on g.cath_id = c.id\n"+
+		"JOIN marks m on s2.id = m.student_id\n"+
+		"where s.subject_id = %d and s.group_id = %d", subjectId, groupId)
+
+	studentsWithMarks, err := db.Query(query)
+	if err != nil {
+		panic(err)
+	}
+	defer studentsWithMarks.Close()
+
+	for studentsWithMarks.Next() {
+		var std database.Statement
+		err := studentsWithMarks.Scan(&std.Cath, &std.Fio, &std.SubjectName, &std.Date, &std.StudentsList, &std.MarksList)
 		if err != nil {
 			continue
 		}
-		fmt.Println(mark.FIO)
-		for _, v := range stds {
-			if v.StudentsList == mark.FIO {
-				v.MarksList = mark.Value
-				fmt.Println(v)
+		stdsWithMarks = append(stdsWithMarks, std)
+	}
+
+	for _, i := range stdsWithoutMarks {
+		for _, j := range stdsWithMarks {
+			if i.StudentsList == j.StudentsList {
+				i.MarksList = j.MarksList
 			}
 		}
 	}
 
-	fmt.Println(stds)
-
 	fmt.Println("getStatements")
-	jsonResponse, err := json.Marshal(stds)
+	jsonResponse, err := json.Marshal(stdsWithoutMarks)
 	w.Write(jsonResponse)
 }
