@@ -75,14 +75,15 @@ func GetStatements(w http.ResponseWriter, r *http.Request) {
 		stdsWithMarks = append(stdsWithMarks, std)
 	}
 
-	for _, i := range stdsWithoutMarks {
-		for _, j := range stdsWithMarks {
+	for k, i := range stdsWithoutMarks {
+		for p, j := range stdsWithMarks {
 			if i.StudentsList == j.StudentsList {
-				i.MarksList = j.MarksList
+				stdsWithoutMarks[k].MarksList = stdsWithMarks[p].MarksList
 			}
 		}
 	}
 
+	fmt.Println(stdsWithoutMarks)
 	fmt.Println("getStatements")
 	jsonResponse, err := json.Marshal(stdsWithoutMarks)
 	w.Write(jsonResponse)
