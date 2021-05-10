@@ -34,7 +34,7 @@ func GetStatements(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	query = fmt.Sprintf("select value from marks, students where (students.group_id = %d and student_id = students.id) and subject_id = %d", groupId, subjectId)
+	query = fmt.Sprintf("select marks.value, students.title from marks, students where (students.group_id = %d and student_id = students.id) and subject_id = %d", groupId, subjectId)
 	fmt.Println(query)
 	marks, err := db.Query(query)
 	if err != nil {
@@ -49,12 +49,21 @@ func GetStatements(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 		stds = append(stds, std)
-		err := marks.Scan(&std.MarksList)
-		if err != nil {
-			continue
-		}
-		stds = append(stds, std)
 	}
+
+	for marks.Next() {
+		var mark database.Mark
+		err = marks.Scan(&mark.Value, &mark.FIO)
+		fmt.Println(mark.FIO)
+		for _, v := range stds {
+			if v.StudentsList == mark.FIO {
+				v.MarksList = mark.Value
+				fmt.Println(v)
+			}
+		}
+	}
+
+	fmt.Println(stds)
 
 	fmt.Println("getStatements")
 	jsonResponse, err := json.Marshal(stds)

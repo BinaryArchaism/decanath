@@ -61,6 +61,7 @@ type Mark struct {
 	Value     uint `json:"value"`
 	StudentId uint `json:"student_id"`
 	SubjectId uint `json:"subject_id"`
+	FIO       string
 }
 type Marks struct {
 	Marks []Mark `json:"marks"`
