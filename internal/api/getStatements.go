@@ -44,11 +44,11 @@ func GetStatements(w http.ResponseWriter, r *http.Request) {
 
 	for students.Next() {
 		var std database.Statement
-		students.Scan(&std.Cath, &std.Fio, &std.SubjectName, &std.Date)
-		err = students.Scan(&std.StudentsList)
+		err = students.Scan(&std.Cath, &std.Fio, &std.SubjectName, &std.Date, &std.StudentsList)
 		if err != nil {
 			continue
 		}
+		stds = append(stds, std)
 		err := marks.Scan(&std.MarksList)
 		if err != nil {
 			continue
