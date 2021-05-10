@@ -44,7 +44,7 @@ func GetStatements(w http.ResponseWriter, r *http.Request) {
 
 	for students.Next() {
 		var std database.Statement
-		err = students.Scan(&std.Cath, &std.Fio, &std.SubjectName, &std.Date, &std.StudentsList)
+		err := students.Scan(&std.Cath, &std.Fio, &std.SubjectName, &std.Date, &std.StudentsList)
 		if err != nil {
 			continue
 		}
@@ -53,7 +53,10 @@ func GetStatements(w http.ResponseWriter, r *http.Request) {
 
 	for marks.Next() {
 		var mark database.Mark
-		err = marks.Scan(&mark.Value, &mark.FIO)
+		err := marks.Scan(&mark.Value, &mark.FIO)
+		if err != nil {
+			continue
+		}
 		fmt.Println(mark.FIO)
 		for _, v := range stds {
 			if v.StudentsList == mark.FIO {
