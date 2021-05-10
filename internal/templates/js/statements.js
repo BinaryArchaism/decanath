@@ -1,5 +1,22 @@
+Date.prototype.getMonthName = function(lang) {
+    lang = lang && (lang in Date.locale) ? lang : 'ru';
+    return Date.locale[lang].month_names[this.getMonth()];
+};
+
+Date.prototype.getMonthNameShort = function(lang) {
+    lang = lang && (lang in Date.locale) ? lang : 'ru';
+    return Date.locale[lang].month_names_short[this.getMonth()];
+};
+
+Date.locale = {
+    ru: {
+        month_names: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+        month_names_short: ['Янв', 'Фев', 'Март', 'Апр', 'Май', 'Июнь', 'Июль', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек']
+    }
+};
+
 $(document).ready(function(){
-    var json_groups, json_subjects
+    var json_groups, json_subjects, json_statements
     var switcher1 = $("#switcher-1")
     var swch_1 = $("#swch-1")
     var switcher2 = $("#switcher-2")
@@ -52,7 +69,34 @@ $(document).ready(function(){
         })
     }
 
-
+    function showGroupList(group_id, subject_id) {
+        get_statements = getGroupStatements(group_id, subject_id)
+        get_statements.then(()=>{
+            list = $("#info")
+            subject_title_label = $(".subject_title").find(".value")
+            fio_lecturer_label = $(".fio_lecturer").find(".value")
+            date_label = $(".date").find(".value")
+            cath_number_label = $(".cath_number").find(".value")
+            json_statements = get_statements.responseJSON
+            cath_number = json_statements[0].cath
+            exam_date = new Date(json_statements[0].date)
+            exam_date = exam_date.getDate() + ' ' + exam_date.getMonthName() + ' ' + exam_date.getFullYear()
+            fio = json_statements[0].fio
+            title = json_statements[0].subject_name
+            subject_title_label.html(title)
+            fio_lecturer_label.html(fio)
+            date_label.html(exam_date)
+            cath_number_label.html(cath_number)
+            json_statements.forEach((statement)=>{
+                 list.append(`<li class="list-group-item">
+                                 <div class="row row-cols-2">
+                                     <div class="col d-flex align-items-center justify-content-center"><p class="m-0">${statement.students_list}</p></div>
+                                     <div class="col d-flex align-items-center justify-content-center"><p class="m-0">${statement.marks_list}</p></div>
+                                 </div>
+                             </li>`)
+            })
+        })
+    }
 
     function getGroupStatements(group_id, subject_id) {
         return $.ajax({
@@ -65,6 +109,9 @@ $(document).ready(function(){
             },
             success: function (response) {
                 return response
+            },
+            error: function(error) {
+                console.log(error)
             }
         })
     }
