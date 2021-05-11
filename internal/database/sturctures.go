@@ -65,6 +65,14 @@ type Mark struct {
 type Marks struct {
 	Marks []Mark `json:"marks"`
 }
+type MarkFio struct {
+	Student   string `json:"fio"`
+	SubjectId string `json:"subject"`
+	Value     string `json:"value"`
+}
+type ID struct {
+	StudentId uint `json:"student_id"`
+}
 
 type Statement struct {
 	Cath         uint   `json:"cath"`
