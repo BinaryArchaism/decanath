@@ -54,7 +54,7 @@ func GetStatementStudent(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var stdsWithMarks = []database.Statement{}
-	query = fmt.Sprintf("select c.number, l.fio, s2.title, s.date, students.title, m.value\n"+
+	query = fmt.Sprintf("select c.number, l.fio, s2.title, s2.id, s.date, students.title, m.value\n"+
 		"from students\n"+
 		"join groups g on g.id = students.group_id\n"+
 		"join schedules s on g.id = s.group_id\n"+
@@ -72,7 +72,7 @@ func GetStatementStudent(w http.ResponseWriter, r *http.Request) {
 
 	for studentsWithMarks.Next() {
 		var std database.Statement
-		err := studentsWithMarks.Scan(&std.Cath, &std.Fio, &std.SubjectName, &std.Date, &std.StudentsList, &std.MarksList)
+		err := studentsWithMarks.Scan(&std.Cath, &std.Fio, &std.SubjectName, &std.SubjectId, &std.Date, &std.StudentsList, &std.MarksList)
 		if err != nil {
 			continue
 		}

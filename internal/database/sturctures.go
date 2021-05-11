@@ -78,6 +78,7 @@ type Statement struct {
 	Cath         uint   `json:"cath"`
 	Fio          string `json:"fio"`
 	SubjectName  string `json:"subject_name"`
+	SubjectId    string `json:"subject_id"`
 	Date         string `json:"date"`
 	StudentsList string `json:"students_list"`
 	MarksList    uint   `json:"marks_list"`
