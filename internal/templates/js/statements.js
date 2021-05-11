@@ -95,45 +95,56 @@ $(document).ready(function(){
         get_student_exams = getStudentExams(student_fio)
         get_student_exams.then(()=>{
             json_student_exams = get_student_exams.responseJSON
+            var stmnts = $('#stmnts')
+            stmnts.html('<li class="list-group-item">\n' +
+                '                <div class="row row-cols-6">\n' +
+                '                    <div class="col d-flex align-items-center justify-content-center"><p class="m-0">Назавание предмета</p></div>\n' +
+                '                    <div class="col d-flex align-items-center justify-content-center"><p class="m-0">Дата</p></div>\n' +
+                '                    <div class="col d-flex align-items-center justify-content-center"><p class="m-0">Кафедра</p></div>\n' +
+                '                    <div class="col d-flex align-items-center justify-content-center"><p class="m-0">ФИО Преподавателя</p></div>\n' +
+                '                    <div class="col d-flex align-items-center justify-content-center"><p class="m-0">ФИО Студента</p></div>\n' +
+                '                    <div class="col d-flex align-items-center justify-content-center"><p class="m-0">Оценка</p></div>\n' +
+                '                </div>\n' +
+                '            </li>')
             list = $("#info")
             list.html("")
-            subject_title_label = $(".subject_title").find(".value")
-            fio_lecturer_label = $(".fio_lecturer").find(".value")
-            date_label = $(".date").find(".value")
-            cath_number_label = $(".cath_number").find(".value")
             if (json_student_exams.length>0){
-
-                cath_number = json_student_exams[0].cath
-                exam_date = new Date(json_student_exams[0].date)
-                exam_date = exam_date.getDate() + ' ' + exam_date.getMonthName() + ' ' + exam_date.getFullYear()
-                fio = json_student_exams[0].fio
-                title = json_student_exams[0].subject_name
-                subject_title_label.html(title)
-                fio_lecturer_label.html(fio)
-                date_label.html(exam_date)
-                cath_number_label.html(cath_number)
-
                 json_student_exams.forEach((exam)=>{
+                    cath_number = json_student_exams[0].cath
+                    fio = json_student_exams[0].fio
+                    exam_date = new Date(json_student_exams[0].date)
+                    exam_date = exam_date.getDate() + ' ' + exam_date.getMonthName() + ' ' + exam_date.getFullYear()
                     list.append(`<li class="list-group-item">
-                                 <div class="row row-cols-2">
+                                 <div class="row row-cols-6">
+                                     <div class="col d-flex align-items-center justify-content-center"><p class="m-0">${exam.subject_name}</p></div>
+                                     <div class="col d-flex align-items-center justify-content-center"><p class="m-0">${exam_date}</p></div>
+                                     <div class="col d-flex align-items-center justify-content-center"><p class="m-0">${exam.cath}</p></div>
+                                     <div class="col d-flex align-items-center justify-content-center"><p class="m-0">${exam.fio}</p></div>
                                      <div class="col d-flex align-items-center justify-content-center"><p class="m-0">${exam.students_list}</p></div>
-                                     <select class="select-mark" id="${cath_number}_${json_student_exams.indexOf(exam)}_${exam.students_list.replaceAll(' ', '_')}">
+                                     <select class="select-mark" id="${cath_number}_${exam.subject_id}_${exam.students_list.replaceAll(' ', '_')}">
                                     </select>
                                  </div>
                              </li>`)
 
-                    select_mark = $(`#${cath_number}_${json_student_exams.indexOf(exam)}_${exam.students_list.replaceAll(' ', '_')}`)
+                    select_mark = $(`#${cath_number}_${exam.subject_id}_${exam.students_list.replaceAll(' ', '_')}`)
                     for (m in mark){
                         let attr = ""
-                        if (m == mark[exam.marks_list]){
+                        if (m == exam.marks_list){
                             attr = "selected"
                         }
                         select_mark.append(`<option ${attr} val="${m}">${mark[m]}</option>`)
                     }
                     select_mark.on('change', function() {
-                        mark_value = $(this).find(":selected").val()
-                        student_fio = this.id.split('_')[2]+' '+this.id.split('_')[3]+' '+this.id.split('_')[4]
-                        subj_id = swch_2.val()
+                        parts = this.id.split('_')
+                        mark_value = $(this).find(":selected").index().toString()
+                        student_fio = ""
+                        parts.forEach((part)=>{
+                            if (parts.indexOf(part)>1){
+                                student_fio = student_fio + ' ' + part
+                            }
+                        })
+                        student_fio = student_fio.trim()
+                        subj_id = parts[1]
                         setMark(mark_value, student_fio, subj_id)
                     });
                 })

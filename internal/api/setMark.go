@@ -31,6 +31,8 @@ func SetMark(w http.ResponseWriter, r *http.Request) {
 		"from students\n"+
 		"where students.title = '%s'", req.Student)
 
+	fmt.Println(query)
+
 	result, err := db.Query(query)
 	if err != nil {
 		panic(err)
@@ -41,6 +43,7 @@ func SetMark(w http.ResponseWriter, r *http.Request) {
 		var std database.ID
 		err := result.Scan(&std.StudentId)
 		if err != nil {
+			panic(err)
 			continue
 		}
 		stds = append(stds, std)
