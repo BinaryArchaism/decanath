@@ -14,6 +14,7 @@ func SetMark(w http.ResponseWriter, r *http.Request) {
 	var req database.MarkFio
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
+		panic(err)
 		log.Fatal(err)
 	}
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+

@@ -74,6 +74,10 @@ type ID struct {
 	StudentId uint `json:"student_id"`
 }
 
+type StudentStatementsReq struct {
+	Student_fio string `json:"student_fio"`
+}
+
 type Statement struct {
 	Cath         uint   `json:"cath"`
 	Fio          string `json:"fio"`
