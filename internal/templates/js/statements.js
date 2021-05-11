@@ -94,12 +94,28 @@ $(document).ready(function(){
                 cath_number_label.html(cath_number)
 
                 json_statements.forEach((statement)=>{
+                    // list.append(`<li class="list-group-item">
+                    //              <div class="row row-cols-2">
+                    //                  <div class="col d-flex align-items-center justify-content-center"><p class="m-0">${statement.students_list}</p></div>
+                    //                  <div class="col d-flex align-items-center justify-content-center"><p class="m-0">${mark[statement.marks_list]}</p></div>
+                    //              </div>
+                    //          </li>`)
                     list.append(`<li class="list-group-item">
                                  <div class="row row-cols-2">
                                      <div class="col d-flex align-items-center justify-content-center"><p class="m-0">${statement.students_list}</p></div>
-                                     <div class="col d-flex align-items-center justify-content-center"><p class="m-0">${mark[statement.marks_list]}</p></div>
+                                     <select class="select-mark" id="${cath_number}_${statement.students_list.replaceAll(' ', '_')}">
+                                    </select>
                                  </div>
                              </li>`)
+
+                    select_mark = $(`#${cath_number}_${statement.students_list.replaceAll(' ', '_')}`)
+                    for (m in mark){
+                        let attr = ""
+                        if (m == mark[statement.marks_list]){
+                                attr = "selected"
+                        }
+                        select_mark.append(`<option ${attr} val="${m}">${m}</option>`)
+                    }
                 })
             }
             else{
