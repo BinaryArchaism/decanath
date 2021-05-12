@@ -102,6 +102,34 @@ $(document).ready(function(){
         date_label.html("")
         cath_number_label.html("")
 
+        no_count_label = $(".count-no").find(".label")
+        two_label = $(".count-2").find(".label")
+        three_label = $(".count-3").find(".label")
+        four_label = $(".count-4").find(".label")
+        five_label = $(".count-5").find(".label")
+        nez_label = $(".count-nez").find(".label")
+        zach_label = $(".count-zach").find(".label")
+        average_label = $(".count-average").find(".label")
+
+        no_count_label.html(""); two_label.html("");
+        three_label.html(""); four_label.html("");
+        five_label.html(""); nez_label.html("")
+        zach_label.html(""); average_label.html("")
+
+        no_count_value = $(".count-no").find(".value")
+        two_value = $(".count-2").find(".value")
+        three_value = $(".count-3").find(".value")
+        four_value = $(".count-4").find(".value")
+        five_value = $(".count-5").find(".value")
+        nez_value = $(".count-nez").find(".value")
+        zach_value = $(".count-zach").find(".value")
+        average_value = $(".count-average").find(".value")
+
+        no_count_value.html(""); two_value.html("");
+        three_value.html(""); four_value.html("");
+        five_value.html(""); nez_value.html("");
+        zach_value.html(""); average_value.html("");
+
         get_student_exams = getStudentExams(student_fio)
         get_student_exams.then(()=>{
             json_student_exams = get_student_exams.responseJSON
@@ -173,7 +201,40 @@ $(document).ready(function(){
             fio_lecturer_label = $(".fio_lecturer").find(".value")
             date_label = $(".date").find(".value")
             cath_number_label = $(".cath_number").find(".value")
+
+            no_count_label = $(".count-no").find(".label")
+            two_label = $(".count-2").find(".label")
+            three_label = $(".count-3").find(".label")
+            four_label = $(".count-4").find(".label")
+            five_label = $(".count-5").find(".label")
+            nez_label = $(".count-nez").find(".label")
+            zach_label = $(".count-zach").find(".label")
+            average_label = $(".count-average").find(".label")
+
+            no_count_label.html("Неявки: "); two_label.html("2: ");
+            three_label.html("3: "); four_label.html("4: ");
+            five_label.html("5: "); nez_label.html("Незачет: ")
+            zach_label.html("Зачет: "); average_label.html("Ср. балл: ")
+
+            no_count_value = $(".count-no").find(".value")
+            two_value = $(".count-2").find(".value")
+            three_value = $(".count-3").find(".value")
+            four_value = $(".count-4").find(".value")
+            five_value = $(".count-5").find(".value")
+            nez_value = $(".count-nez").find(".value")
+            zach_value = $(".count-zach").find(".value")
+            average_value = $(".count-average").find(".value")
+
             json_statements = get_statements.responseJSON
+            analyze_array = analyzeStatement(json_statements)
+
+            average = (analyze_array[2] * 2 + analyze_array[3] * 3 + analyze_array[4] * 4 + analyze_array[5] * 5) / (analyze_array[2] + analyze_array[3] + analyze_array[4] + analyze_array[5])
+            
+            no_count_value.html(analyze_array[1]); two_value.html(analyze_array[2]);
+            three_value.html(analyze_array[3]); four_value.html(analyze_array[4]);
+            five_value.html(analyze_array[5]); nez_value.html(analyze_array[6]);
+            zach_value.html(analyze_array[7]); average_value.html(average);
+
             if (json_statements.length>0){
 
                 cath_number = json_statements[0].cath
@@ -198,13 +259,13 @@ $(document).ready(function(){
                     select_mark = $(`#${cath_number}_${statement.students_list.replaceAll(' ', '_')}`)
                     for (m in mark){
                         let attr = ""
-                        if (m == mark[statement.marks_list]){
+                        if (m == statement.marks_list){
                                 attr = "selected"
                         }
                         select_mark.append(`<option ${attr} val="${m}">${mark[m]}</option>`)
                     }
                     select_mark.on('change', function() {
-                        mark_value = $(this).find(":selected").val()
+                        mark_value = $(this).find(":selected").index().toString()
                         student_fio = this.id.split('_')[1]+' '+this.id.split('_')[2]+' '+this.id.split('_')[3]
                         subj_id = swch_2.val()
                         setMark(mark_value, student_fio, subj_id)
@@ -292,5 +353,13 @@ $(document).ready(function(){
                 console.log(error)
             }
         })
+    }
+
+    function analyzeStatement(arr) {
+        result = [0,0,0,0,0,0,0,0]
+        arr.forEach((elem)=>{
+            result[elem.marks_list]+=1
+        })
+        return result
     }
 })
