@@ -92,6 +92,16 @@ $(document).ready(function(){
     }
     
     function showStudentList(student_fio) {
+        subject_title_label = $(".subject_title").find(".label")
+        fio_lecturer_label = $(".fio_lecturer").find(".label")
+        date_label = $(".date").find(".label")
+        cath_number_label = $(".cath_number").find(".label")
+
+        subject_title_label.html("")
+        fio_lecturer_label.html("")
+        date_label.html("")
+        cath_number_label.html("")
+
         get_student_exams = getStudentExams(student_fio)
         get_student_exams.then(()=>{
             json_student_exams = get_student_exams.responseJSON
@@ -155,6 +165,8 @@ $(document).ready(function(){
     function showGroupList(group_id, subject_id) {
         get_statements = getGroupStatements(group_id, subject_id)
         get_statements.then(()=>{
+            stmnts = $("#stmnts")
+            stmnts.html("")
             list = $("#info")
             list.html("")
             subject_title_label = $(".subject_title").find(".value")
