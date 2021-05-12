@@ -15,7 +15,7 @@ Date.locale = {
     }
 };
 
-var mark = {0:"-", 1:"1", 2:"2", 3:"3", 4:"4", 5:"5", 6:"Незачет", 7:"Зачет"}
+var mark = {0:"-", 1:"Неявка", 2:"2", 3:"3", 4:"4", 5:"5", 6:"Незачет", 7:"Зачет"}
 
 $(document).ready(function(){
     var json_groups, json_subjects, json_statements, json_students, json_student_exams

@@ -42,8 +42,8 @@ $(document).ready(function(){
 
     $('#by_lecturers').click(function(e) {
         e.preventDefault();
-        json_subjects = getSubjects()
-        json_subjects.then(()=>{
+        get_subjects = getSubjects()
+        get_subjects.then(()=>{
             prepareLecturersSelect(function () {
                 showByLecturers(resp)
             });
