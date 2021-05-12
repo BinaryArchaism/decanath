@@ -110,9 +110,7 @@ $(document).ready(function(){
             list.html("")
             if (json_student_exams.length>0){
                 json_student_exams.forEach((exam)=>{
-                    cath_number = json_student_exams[0].cath
-                    fio = json_student_exams[0].fio
-                    exam_date = new Date(json_student_exams[0].date)
+                    exam_date = new Date(exam.date)
                     exam_date = exam_date.getDate() + ' ' + exam_date.getMonthName() + ' ' + exam_date.getFullYear()
                     list.append(`<li class="list-group-item">
                                  <div class="row row-cols-6">
@@ -121,12 +119,12 @@ $(document).ready(function(){
                                      <div class="col d-flex align-items-center justify-content-center"><p class="m-0">${exam.cath}</p></div>
                                      <div class="col d-flex align-items-center justify-content-center"><p class="m-0">${exam.fio}</p></div>
                                      <div class="col d-flex align-items-center justify-content-center"><p class="m-0">${exam.students_list}</p></div>
-                                     <select class="select-mark" id="${cath_number}_${exam.subject_id}_${exam.students_list.replaceAll(' ', '_')}">
+                                     <select class="select-mark" id="${exam.cath}_${exam.subject_id}_${exam.students_list.replaceAll(' ', '_')}">
                                     </select>
                                  </div>
                              </li>`)
 
-                    select_mark = $(`#${cath_number}_${exam.subject_id}_${exam.students_list.replaceAll(' ', '_')}`)
+                    select_mark = $(`#${exam.cath}_${exam.subject_id}_${exam.students_list.replaceAll(' ', '_')}`)
                     for (m in mark){
                         let attr = ""
                         if (m == exam.marks_list){
