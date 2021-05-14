@@ -19,6 +19,7 @@ func Handle() {
 	rtr.HandleFunc("/internal/api/get_subjects", api.GetSubjects)
 	rtr.HandleFunc("/internal/api/get_statements", api.GetStatements)
 	rtr.HandleFunc("/internal/api/get_statement_student", api.GetStatementStudent)
+	rtr.HandleFunc("/internal/api/get_exams", api.GetExams)
 	rtr.HandleFunc("/internal/api/setMark", api.SetMark)
 	http.HandleFunc("/jquery.min.js", api.SendJqueryJs)
 	fs := http.FileServer(http.Dir("./internal/templates"))

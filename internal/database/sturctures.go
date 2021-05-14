@@ -87,3 +87,11 @@ type Statement struct {
 	StudentsList string `json:"students_list"`
 	MarksList    uint   `json:"marks_list"`
 }
+
+type Exam struct {
+	SubjectId    uint   `json:"id"`
+	SubjectTitle string `json:"title"`
+}
+type Exams struct {
+	Exams []Exam `json:"exams"`
+}
