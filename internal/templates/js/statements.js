@@ -19,10 +19,20 @@ var mark = {0:"-", 1:"Неявка", 2:"2", 3:"3", 4:"4", 5:"5", 6:"Незаче
 
 $(document).ready(function(){
     var json_groups, json_subjects, json_statements, json_students, json_student_exams
+    var subject_ids = []
+    var ans = [0,0,0,0,0,0,0,0]
     var switcher1 = $("#switcher-1")
     var swch_1 = $("#swch-1")
     var switcher2 = $("#switcher-2")
     var swch_2 = $("#swch-2")
+    var no_count_value = $(".count-no").find(".value")
+    var two_value = $(".count-2").find(".value")
+    var three_value = $(".count-3").find(".value")
+    var four_value = $(".count-4").find(".value")
+    var five_value = $(".count-5").find(".value")
+    var nez_value = $(".count-nez").find(".value")
+    var zach_value = $(".count-zach").find(".value")
+    var average_value = $(".count-average").find(".value")
 
     showSecondSwitcher()
     prepareGroupSwitchers()
@@ -58,19 +68,9 @@ $(document).ready(function(){
             json_groups.forEach((group)=>{
                 swch_1.append(`<option value=${group.id}>${group.number}</option>`)
             })
-            swch_2 = $("#swch-2")
-            swch_2.append(`<option value="">Выберите предмет</option>`)
-            get_subjects = getSubjects()
-            get_subjects.then(()=>{
-                json_subjects = get_subjects.responseJSON
-                json_subjects.forEach((subject)=>{
-                    swch_2.append(`<option value=${subject.id}>${subject.title}</option>`)
-                })
-            })
-            swch_2.on('change', function() {
+            swch_1.on('change', function() {
                 group_id = swch_1.val()
-                subject_id = this.value
-                showGroupList(group_id, subject_id)
+                showGroupExamsList(group_id)
             });
         })
     }
@@ -90,7 +90,27 @@ $(document).ready(function(){
             });
         })
     }
-    
+
+    function showGroupExamsList(group_id){
+        swch_2 = $("#swch-2")
+        swch_2.html("")
+        subject_ids = []
+        swch_2.append(`<option value="">Выберите предмет</option>`)
+        get_subjects = getExamGroups(group_id)
+        get_subjects.then(()=>{
+            json_subjects = get_subjects.responseJSON
+            json_subjects.forEach((subject)=>{
+                subject_ids.push(subject.id)
+                swch_2.append(`<option value=${subject.id}>${subject.title}</option>`)
+            })
+        })
+        swch_2.on('change', function() {
+            group_id = swch_1.val()
+            subject_id = this.value
+            showGroupList(group_id, subject_id)
+        });
+    }
+
     function showStudentList(student_fio) {
         subject_title_label = $(".subject_title").find(".label")
         fio_lecturer_label = $(".fio_lecturer").find(".label")
@@ -191,7 +211,7 @@ $(document).ready(function(){
     }
 
     function showGroupList(group_id, subject_id) {
-        get_statements = getGroupStatements(group_id, subject_id)
+        get_statements = getGroupStatements(group_id, subject_id, 0)
         get_statements.then(()=>{
             stmnts = $("#stmnts")
             stmnts.html("")
@@ -216,25 +236,9 @@ $(document).ready(function(){
             five_label.html("5: "); nez_label.html("Незачет: ")
             zach_label.html("Зачет: "); average_label.html("Ср. балл: ")
 
-            no_count_value = $(".count-no").find(".value")
-            two_value = $(".count-2").find(".value")
-            three_value = $(".count-3").find(".value")
-            four_value = $(".count-4").find(".value")
-            five_value = $(".count-5").find(".value")
-            nez_value = $(".count-nez").find(".value")
-            zach_value = $(".count-zach").find(".value")
-            average_value = $(".count-average").find(".value")
+            analyzeStatements(group_id, subject_ids)
 
             json_statements = get_statements.responseJSON
-            analyze_array = analyzeStatement(json_statements)
-
-            average = (analyze_array[2] * 2 + analyze_array[3] * 3 + analyze_array[4] * 4 + analyze_array[5] * 5) / (analyze_array[2] + analyze_array[3] + analyze_array[4] + analyze_array[5])
-            
-            no_count_value.html(analyze_array[1]); two_value.html(analyze_array[2]);
-            three_value.html(analyze_array[3]); four_value.html(analyze_array[4]);
-            five_value.html(analyze_array[5]); nez_value.html(analyze_array[6]);
-            zach_value.html(analyze_array[7]); average_value.html(average);
-
             if (json_statements.length>0){
 
                 cath_number = json_statements[0].cath
@@ -297,7 +301,7 @@ $(document).ready(function(){
         })
     }
 
-    function getGroupStatements(group_id, subject_id) {
+    function getGroupStatements(group_id, subject_id, other) {
         return $.ajax({
             dataType: "json",
             type: "get",
@@ -307,9 +311,37 @@ $(document).ready(function(){
                 "subject": subject_id,
             },
             success: function (response) {
-                return response
+                if (other === 1){
+                    analyzed_arr = analyzeStatement(response)
+                    analyzed_arr.forEach((elem)=>{
+                        ans[analyzed_arr.indexOf(elem)]+=elem
+                    })
+                    average = (ans[2] * 2 + ans[3] * 3 + ans[4] * 4 + ans[5] * 5) / (ans[2] + ans[3] + ans[4] + ans[5])
+
+                    no_count_value.html(ans[1]); two_value.html(ans[2]);
+                    three_value.html(ans[3]); four_value.html(ans[4]);
+                    five_value.html(ans[5]); nez_value.html(ans[6]);
+                    zach_value.html(ans[7]); average_value.html(average);
+                }
             },
             error: function(error) {
+                console.log(error)
+            }
+        })
+    }
+
+    function getExamGroups(group_id){
+        return $.ajax({
+            dataType: "json",
+            type: "post",
+            url: "/internal/api/get_exams",
+            data: JSON.stringify( {
+                    "id": parseInt(group_id),
+                }),
+            success: function (response) {
+                return response
+            },
+            error: function (error) {
                 console.log(error)
             }
         })
@@ -355,11 +387,20 @@ $(document).ready(function(){
         })
     }
 
+    function analyzeStatements(group_id, subject_ids){
+        ans = [0, 0, 0, 0, 0, 0, 0, 0]
+        subject_ids.forEach((id)=>{
+            getGroupStatements(group_id, id, 1)
+        })
+    }
+
     function analyzeStatement(arr) {
+        // console.log(arr)
         result = [0,0,0,0,0,0,0,0]
         arr.forEach((elem)=>{
             result[elem.marks_list]+=1
         })
+        // console.log(result)
         return result
     }
 })
